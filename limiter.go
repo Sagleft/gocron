@@ -1,4 +1,4 @@
-package simplecron
+package gocron
 
 import "time"
 
