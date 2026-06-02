@@ -13,6 +13,7 @@ type CronObject struct {
 	stopWG    sync.WaitGroup
 	active    bool
 	paused    bool
+	inProcess bool
 }
 
 func NewCronHandler(callback func(), timerTime time.Duration) *CronObject {
@@ -60,8 +61,10 @@ func (c *CronObject) Run(immediately ...bool) {
 		}
 
 		for c.active {
-			if !c.paused {
+			if !c.paused && !c.inProcess {
+				c.inProcess = true
 				c.callback()
+				c.inProcess = false
 			}
 
 			select {
